@@ -54,8 +54,8 @@ it('states the single-letter shortcuts the commands really have', function () {
 it('lists in SPEC the directories a module may hold, as the layout constants declare them', function () {
     $spec = PackageDocs::read('SPEC.md');
 
-    expect(PackageDocs::rowEntries($spec, 'Class directories'))->toBe(ModuleLayout::CLASS_DIRECTORIES)
-        ->and(PackageDocs::rowEntries($spec, 'Data directories'))->toBe(ModuleLayout::DATA_DIRECTORIES);
+    expect(PackageDocs::bulletEntries($spec, 'Class directories'))->toBe(ModuleLayout::CLASS_DIRECTORIES)
+        ->and(PackageDocs::bulletEntries($spec, 'Data directories'))->toBe(ModuleLayout::DATA_DIRECTORIES);
 });
 
 it('lists in SPEC the reserved first namespace segments', function () {

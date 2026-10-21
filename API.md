@@ -8,6 +8,7 @@ The generator Actions behind `module:*` (`Create*Action`, `Move*Action`, `Delete
 
 ## Table of Contents
 
+<!-- generated:contents -->
 - [Data Objects](#data-objects)
   - [DataObject](#dataobject)
   - [InputData](#inputdata)
@@ -17,11 +18,23 @@ The generator Actions behind `module:*` (`Create*Action`, `Move*Action`, `Delete
   - [ModuleRegistrar](#moduleregistrar)
   - [ModuleCache](#modulecache)
 - [Module Manifest and Definitions](#module-manifest-and-definitions)
+  - [ModuleManifest](#modulemanifest)
+  - [ModuleDefinition](#moduledefinition)
+  - [InstalledModule](#installedmodule)
+  - [InstallResult](#installresult)
 - [Module Lifecycle Actions](#module-lifecycle-actions)
+  - [ResolveModuleAction](#resolvemoduleaction)
+  - [CreateModuleAction](#createmoduleaction)
+  - [InstallModuleAction](#installmoduleaction)
+  - [UninstallModuleAction](#uninstallmoduleaction)
+  - [RemoveModuleAction](#removemoduleaction)
+  - [DiscoverModulesAction](#discovermodulesaction)
+  - [DiscoverInstalledModulesAction](#discoverinstalledmodulesaction)
 - [Architecture Checks](#architecture-checks)
 - [Exceptions](#exceptions)
 - [Enums](#enums)
 - [Internal Collaborators](#internal-collaborators)
+<!-- /generated:contents -->
 
 ---
 

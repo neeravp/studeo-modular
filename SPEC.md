@@ -29,7 +29,9 @@ Everything else is derived by convention:
 
 A module with a `composer.json` and no `module.json` is a hard error that prints the exact `module.json` to create. A provider that does not use `ModuleRegistrar` is refused, with the replacement provider printed. A manifest failure is never swallowed.
 
+<!-- generated:reserved-segments -->
 The first namespace segment may not be `App`, `Database`, `Tests`, `Illuminate`, `Livewire`, `Inertia`, `Laravel`, `Symfony`, `Composer`, `PHPUnit` or `Pest`.
+<!-- /generated:reserved-segments -->
 
 ## 2. Module layout
 
@@ -41,11 +43,11 @@ modules/{Name}/
 └── <data directories>
 ```
 
-| Kind | Directories |
-| --- | --- |
-| Root files | `module.json`, `{Name}ServiceProvider.php`; no other PHP file |
-| Class directories (PascalCase, hold PHP classes) | `Actions`, `ApiResources`, `Commands`, `Concerns`, `Contracts`, `Controllers`, `Data`, `Enums`, `Events`, `Exceptions`, `Jobs`, `Listeners`, `Livewire`, `Mail`, `Middleware`, `Models`, `Notifications`, `Policies`, `Rules`, `Services` |
-| Data directories (lowercase, hold other files) | `config`, `database`, `lang`, `resources`, `routes`, `schema`, `tests` |
+- Root files: `module.json`, `{Name}ServiceProvider.php`; no other PHP file.
+<!-- generated:layout-directories -->
+- Class directories (PascalCase, hold PHP classes): `Actions`, `ApiResources`, `Commands`, `Concerns`, `Contracts`, `Controllers`, `Data`, `Enums`, `Events`, `Exceptions`, `Jobs`, `Listeners`, `Livewire`, `Mail`, `Middleware`, `Models`, `Notifications`, `Policies`, `Rules`, `Services`
+- Data directories (lowercase, hold other files): `config`, `database`, `lang`, `resources`, `routes`, `schema`, `tests`
+<!-- /generated:layout-directories -->
 
 - A class directory sits directly in the module root. Subfolders inside it are allowed for grouping, and the namespace follows the path.
 - Every named class has the namespace its path implies and a name equal to its file name.

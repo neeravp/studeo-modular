@@ -18,6 +18,7 @@ Published for the maintainer's own use and offered as-is under the MIT license. 
 
 ## Table of Contents
 
+<!-- generated:contents -->
 - [Status](#status)
 - [Overview](#overview)
 - [Requirements](#requirements)
@@ -37,6 +38,7 @@ Published for the maintainer's own use and offered as-is under the MIT license. 
 - [Configuration](#configuration)
 - [More](#more)
 - [License](#license)
+<!-- /generated:contents -->
 
 ---
 
@@ -407,7 +409,9 @@ Text output is one line per finding, `path:line [rule] message`, each message wi
 | 1 | At least one error. |
 | 2 | A module could not be read, a directory was skipped under `--all`, the rule configuration is invalid, `--module` was combined with `--all`, `--format` is unknown, or the check itself failed. |
 
+<!-- generated:default-rules -->
 The default rules are `action-authorization`, `action-shape`, `condition-extraction`, `controller-shape`, `dto-shape`, `file-length`, `flat-modules`, `method-complexity`, `method-naming`, `migration`, `module-isolation`, `nesting-depth`, `no-dto-in-livewire-state`, `step-count` and `system-action-usage`.
+<!-- /generated:default-rules -->
 
 To change a limit or add rules, extend `Studeo\Modular\Check\DefaultRules`, return your own `Studeo\Check\Engine\RuleSet` from `rules()`, and name your class in `config/modular.php`:
 

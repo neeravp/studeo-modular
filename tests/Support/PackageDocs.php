@@ -66,13 +66,13 @@ final class PackageDocs
     }
 
     /**
-     * The backticked entries of the cell that follows a row label in a Markdown table.
+     * The backticked entries of the bullet that starts with a label.
      *
      * @return list<string>
      */
-    public static function rowEntries(string $text, string $label): array
+    public static function bulletEntries(string $text, string $label): array
     {
-        $found = preg_match('/^\| '.preg_quote($label, '/').'[^|]*\| (.+?) \|$/m', $text, $match);
+        $found = preg_match('/^- '.preg_quote($label, '/').'[^:\n]*: (.+)$/m', $text, $match);
 
         return $found === 1 ? self::matches('/`([^`]+)`/', $match[1]) : [];
     }
