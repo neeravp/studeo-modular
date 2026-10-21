@@ -14,6 +14,8 @@ use Studeo\Modular\DataObjects\SchemaDefinition;
 use Studeo\Modular\DataObjects\SchemaIssue;
 use Studeo\Modular\Support\FakerDefinitionResolver;
 use Studeo\Modular\Support\PhpImports;
+use Studeo\Modular\Support\Schema\ForeignKeyFaker;
+use Studeo\Modular\Support\Schema\ModuleModels;
 use Studeo\Modular\Support\SchemaWarnings;
 
 final class CreateFactoryAction
@@ -25,6 +27,7 @@ final class CreateFactoryAction
         private readonly StubRenderer $stubRenderer,
         private readonly ModuleGuard $moduleGuard,
         private readonly ArtifactWriter $artifactWriter,
+        private readonly ModuleModels $models,
     ) {}
 
     public function execute(
@@ -143,7 +146,7 @@ final class CreateFactoryAction
      */
     private function definition(ModuleDefinition $module, SchemaDefinition $schema, PhpImports $imports): array
     {
-        $definition = FakerDefinitionResolver::definition($schema, $module, config('auth.providers.users.model'), $imports);
+        $definition = FakerDefinitionResolver::definition($schema, new ForeignKeyFaker($this->models, $module, config('auth.providers.users.model'), $imports), $imports);
 
         foreach ($definition->omitted as $column => $reason) {
             $this->warnings->add(SchemaIssue::warning("fields.{$column}", 'factory_foreign_key', $reason));

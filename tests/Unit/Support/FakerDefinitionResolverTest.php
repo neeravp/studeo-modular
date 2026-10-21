@@ -4,6 +4,8 @@ use Studeo\Modular\Console\Actions\ParseCliSchemaAction;
 use Studeo\Modular\DataObjects\FactoryDefinition;
 use Studeo\Modular\DataObjects\FieldDefinition;
 use Studeo\Modular\Support\FakerDefinitionResolver;
+use Studeo\Modular\Support\Schema\ForeignKeyFaker;
+use Studeo\Modular\Support\Schema\ModuleModels;
 
 it('resolves exact name based faker definitions', function (): void {
     $email = new FieldDefinition(name: 'email', type: 'string');
@@ -27,7 +29,7 @@ it('resolves patterned name faker definitions for emails and urls', function ():
 
 function factoryDefinition(string $fields, $module, ?string $userModel = null): FactoryDefinition
 {
-    return FakerDefinitionResolver::definition((new ParseCliSchemaAction)->execute($fields), $module, $userModel);
+    return FakerDefinitionResolver::definition((new ParseCliSchemaAction)->execute($fields), new ForeignKeyFaker(new ModuleModels, $module, $userModel));
 }
 
 it('fakes a foreign key to a model of the module through that model\'s factory', function (): void {

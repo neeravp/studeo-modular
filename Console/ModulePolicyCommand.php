@@ -25,6 +25,7 @@ class ModulePolicyCommand extends ModuleCommand
         CreatePolicyAction $creator,
         DiscoverModelsAction $modelsDiscoverer,
         ModulePicker $picker,
+        ModuleModels $models,
     ): int {
         try {
             $name = $this->resolveNameArgument(
@@ -34,7 +35,7 @@ class ModulePolicyCommand extends ModuleCommand
             );
 
             $module = $picker->resolve($this, $this->scalarOption('module'));
-            $model = $this->resolveModelInput($name, $module, $modelsDiscoverer);
+            $model = $this->resolveModelInput($name, $module, $modelsDiscoverer, $models);
 
             $path = $creator->execute($module, $name, $model);
         } catch (Throwable $exception) {
@@ -52,9 +53,10 @@ class ModulePolicyCommand extends ModuleCommand
         string $name,
         ModuleDefinition $module,
         DiscoverModelsAction $modelsDiscoverer,
+        ModuleModels $models,
     ): ?string {
         if ($this->stringOption('model') !== null) {
-            return ModuleModels::resolve($module, (string) $this->stringOption('model'));
+            return $models->resolve($module, (string) $this->stringOption('model'));
         }
 
         $available = $this->canPrompt() ? array_keys($modelsDiscoverer->forModule($module)) : [];

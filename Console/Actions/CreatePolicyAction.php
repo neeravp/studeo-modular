@@ -21,6 +21,7 @@ final class CreatePolicyAction
         private readonly StubRenderer $stubRenderer,
         private readonly ModuleGuard $moduleGuard,
         private readonly ArtifactWriter $artifactWriter,
+        private readonly ModuleModels $models,
     ) {}
 
     public function execute(
@@ -33,7 +34,7 @@ final class CreatePolicyAction
         $this->moduleGuard->ensureExists($module);
         $this->artifactWriter->ensureDoesNotExist($this->policyPath($module, $policyName), 'Policy', $policyName, $module);
 
-        return $this->createPolicy($module, $policyName, $this->hasModel($model) ? ModuleModels::resolve($module, (string) $model) : null);
+        return $this->createPolicy($module, $policyName, $this->hasModel($model) ? $this->models->resolve($module, (string) $model) : null);
     }
 
     private function createPolicy(

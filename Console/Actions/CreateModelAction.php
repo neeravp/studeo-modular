@@ -28,6 +28,7 @@ final class CreateModelAction
         private readonly StubRenderer $stubRenderer,
         private readonly ModuleGuard $moduleGuard,
         private readonly ArtifactWriter $artifactWriter,
+        private readonly ModuleModels $models,
     ) {}
 
     public function execute(
@@ -40,7 +41,7 @@ final class CreateModelAction
 
         $this->moduleGuard->ensureExists($module);
 
-        $schema = $this->schemaParser->execute($options->schemaPath, $module)->forModule($module->namespace)->forModels(ModuleModels::names($module));
+        $schema = $this->schemaParser->execute($options->schemaPath, $module)->forModule($module->namespace)->forModels($this->models->names($module));
         $tableName = $this->resolveTableName($schema, $modelName);
 
         $this->plan->execute($module, $modelName, $tableName, $options);
@@ -84,7 +85,7 @@ final class CreateModelAction
      */
     private function isFactoryWired(ModuleDefinition $module, string $modelName, bool $withFactory): bool
     {
-        return $withFactory || ModuleModels::hasFactory($module, $modelName);
+        return $withFactory || $this->models->hasFactory($module, $modelName);
     }
 
     private function createMigrationIfRequested(

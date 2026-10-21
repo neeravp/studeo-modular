@@ -19,6 +19,7 @@ final class ResolveActionAuthorizationAction
 
     public function __construct(
         private readonly ResolveActionNameAction $names,
+        private readonly ModuleModels $models,
     ) {}
 
     public function execute(ModuleDefinition $module, string $actionName): ActionAuthorization
@@ -57,7 +58,7 @@ final class ResolveActionAuthorizationAction
 
     private function isModelOf(ModuleDefinition $module, ?string $model): bool
     {
-        return $model !== null && in_array($model, ModuleModels::names($module), true);
+        return $model !== null && in_array($model, $this->models->names($module), true);
     }
 
     private function isModelName(string $model): bool

@@ -14,6 +14,7 @@ get <package>/Console/stubs/dto.input.stub
 ensureDirectoryExists <modules>/Blog/Data
 put <modules>/Blog/Data/CreatePostInput.php
 ensureDirectoryExists <modules>/Blog/Actions
+glob <modules>/Blog/Models/*.php
 get <package>/Console/stubs/action.stub
 put <modules>/Blog/Actions/CreatePostAction.php
 ensureDirectoryExists <modules>/Blog/Livewire/Forms/Posts

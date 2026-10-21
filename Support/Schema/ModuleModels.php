@@ -2,6 +2,7 @@
 
 namespace Studeo\Modular\Support\Schema;
 
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
 use RuntimeException;
 use Studeo\Modular\DataObjects\ModuleDefinition;
@@ -10,14 +11,16 @@ use Studeo\Modular\DataObjects\ModuleDefinition;
  * What a module's Models/ and database/factories hold on disk: the model names, the table each
  * one declares (the conventional table when it declares none), and whether a model has a factory.
  */
-final class ModuleModels
+final readonly class ModuleModels
 {
+    public function __construct(private Filesystem $files = new Filesystem) {}
+
     /**
      * @return array<int, string>
      */
-    public static function names(ModuleDefinition $module): array
+    public function names(ModuleDefinition $module): array
     {
-        $files = glob(rtrim($module->path, '/').'/Models/*.php') ?: [];
+        $files = $this->files->glob(rtrim($module->path, '/').'/Models/*.php') ?: [];
         sort($files);
 
         return array_map(fn (string $file): string => basename($file, '.php'), $files);
@@ -26,12 +29,12 @@ final class ModuleModels
     /**
      * @return array<string, string> table => model name
      */
-    public static function tables(ModuleDefinition $module): array
+    public function tables(ModuleDefinition $module): array
     {
         $tables = [];
 
-        foreach (self::names($module) as $name) {
-            $declared = preg_match('/\$table\s*=\s*\'([^\']+)\'/', (string) file_get_contents(rtrim($module->path, '/')."/Models/{$name}.php"), $match) === 1;
+        foreach ($this->names($module) as $name) {
+            $declared = preg_match('/\$table\s*=\s*\'([^\']+)\'/', $this->modelSource($module, $name), $match) === 1;
             $tables[$declared ? $match[1] : SchemaFiles::tableFor($name)] ??= $name;
         }
 
@@ -44,9 +47,9 @@ final class ModuleModels
      *
      * @throws RuntimeException
      */
-    public static function resolve(ModuleDefinition $module, string $name): string
+    public function resolve(ModuleDefinition $module, string $name): string
     {
-        $models = self::names($module);
+        $models = $this->names($module);
         $known = $models === [] ? 'The module has no models yet.' : "The module's models: ".implode(', ', $models).'.';
         $clean = trim($name);
 
@@ -63,12 +66,20 @@ final class ModuleModels
 
     public static function factoryFile(string $model): string
     {
+
         return "database/factories/{$model}Factory.php";
     }
 
-    public static function hasFactory(ModuleDefinition $module, string $model): bool
+    public function hasFactory(ModuleDefinition $module, string $model): bool
     {
-        return is_file(rtrim($module->path, '/').'/'.self::factoryFile($model));
+        return $this->files->isFile(rtrim($module->path, '/').'/'.self::factoryFile($model));
+    }
+
+    private function modelSource(ModuleDefinition $module, string $name): string
+    {
+        $path = rtrim($module->path, '/')."/Models/{$name}.php";
+
+        return $this->files->isFile($path) ? $this->files->get($path) : '';
     }
 
     private static function isClassName(string $name): bool

@@ -27,6 +27,7 @@ final class CreateControllerAction
         private readonly StubRenderer $stubRenderer,
         private readonly ModuleGuard $moduleGuard,
         private readonly ArtifactWriter $artifactWriter,
+        private readonly ModuleModels $models,
     ) {}
 
     /**
@@ -44,7 +45,7 @@ final class CreateControllerAction
         $controllerName = $this->ensureCreatable($module, $name);
         $path = $this->controllerPath($module, $controllerName);
 
-        $model = $options->model === null ? null : ModuleModels::resolve($module, $options->model);
+        $model = $options->model === null ? null : $this->models->resolve($module, $options->model);
 
         $this->files->ensureDirectoryExists(dirname($path));
         $this->files->put($path, $this->content($module, $controllerName, $options, $model, $action));

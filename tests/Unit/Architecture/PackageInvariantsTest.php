@@ -53,13 +53,7 @@ it('keeps classes that offer static helpers abstract, or final and immutable or 
     expect($offenders)->toBe([]);
 });
 
-it('does no input or output in static helpers, apart from the listed ones that only shrink', function () {
-    $known = [
-        'Support/Schema/ModuleModels.php::hasFactory calls is_file',
-        'Support/Schema/ModuleModels.php::names calls glob',
-        'Support/Schema/ModuleModels.php::tables calls file_get_contents',
-        'Support/Schema/SchemaFiles.php::tables calls glob',
-    ];
+it('does no input or output in static helpers', function () {
     $found = [];
 
     foreach (PackageSyntaxTrees::all() as $path => $tree) {
@@ -69,10 +63,8 @@ it('does no input or output in static helpers, apart from the listed ones that o
             $found = [...$found, ...array_map(fn (FuncCall $call): string => "{$path}::{$method->name} calls {$call->name}", $io)];
         }
     }
-    sort($found);
 
-    expect(array_values(array_diff($found, $known)))->toBe([])
-        ->and(array_values(array_diff($known, $found)))->toBe([]);
+    expect($found)->toBe([]);
 });
 
 it('keeps the data, exception and rule layers free of console imports', function () {

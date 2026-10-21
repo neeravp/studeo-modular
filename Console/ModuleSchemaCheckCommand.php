@@ -23,11 +23,11 @@ class ModuleSchemaCheckCommand extends ModuleCommand
      * Exit 0 when nothing differs, 1 for drift or a section that cannot be verified, 2 when a
      * schema is invalid or missing (the issues are printed). Warnings never change the code.
      */
-    public function handle(CheckSchemaDriftAction $checker, ModulePicker $picker): int
+    public function handle(CheckSchemaDriftAction $checker, ModulePicker $picker, SchemaFiles $schemaFiles): int
     {
         try {
             $module = $picker->resolve($this, $this->scalarOption('module'));
-            $tables = $this->tables($module);
+            $tables = $this->tables($module, $schemaFiles);
             $except = $this->except();
         } catch (Throwable $exception) {
             return $this->reportFailure($exception);
@@ -45,11 +45,11 @@ class ModuleSchemaCheckCommand extends ModuleCommand
     /**
      * @return array<int, string>
      */
-    private function tables(ModuleDefinition $module): array
+    private function tables(ModuleDefinition $module, SchemaFiles $schemaFiles): array
     {
         $name = $this->stringArgument('name');
 
-        return $name === null ? SchemaFiles::tables($module) : [SchemaFiles::tableFor((string) $name)];
+        return $name === null ? $schemaFiles->tables($module) : [SchemaFiles::tableFor((string) $name)];
     }
 
     /**

@@ -20,11 +20,12 @@ final class ForeignKeyFaker
     private readonly array $tables;
 
     public function __construct(
+        private readonly ModuleModels $models,
         private readonly ModuleDefinition $module,
         private readonly ?string $userModel = null,
         private readonly ?PhpImports $imports = null,
     ) {
-        $this->tables = ModuleModels::tables($module);
+        $this->tables = $models->tables($module);
     }
 
     /**
@@ -64,7 +65,7 @@ final class ForeignKeyFaker
 
     private function hasFactory(?string $model): bool
     {
-        return $model !== null && ModuleModels::hasFactory($this->module, $model);
+        return $model !== null && $this->models->hasFactory($this->module, $model);
     }
 
     private function isAuthUserTable(string $table): bool

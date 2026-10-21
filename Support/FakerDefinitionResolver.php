@@ -4,7 +4,6 @@ namespace Studeo\Modular\Support;
 
 use Studeo\Modular\DataObjects\FactoryDefinition;
 use Studeo\Modular\DataObjects\FieldDefinition;
-use Studeo\Modular\DataObjects\ModuleDefinition;
 use Studeo\Modular\DataObjects\SchemaDefinition;
 use Studeo\Modular\Support\Schema\ForeignKeyFaker;
 use Studeo\Modular\Support\Schema\ForeignKeyTarget;
@@ -64,9 +63,8 @@ final class FakerDefinitionResolver
      * is faked through its target's factory; one that has none to call is left out, with the reason.
      * Classes are named through the imports when given, fully qualified otherwise.
      */
-    public static function definition(SchemaDefinition $schema, ModuleDefinition $module, ?string $userModel = null, ?PhpImports $imports = null): FactoryDefinition
+    public static function definition(SchemaDefinition $schema, ForeignKeyFaker $keys, ?PhpImports $imports = null): FactoryDefinition
     {
-        $keys = new ForeignKeyFaker($module, $userModel, $imports);
         $fillable = array_values(array_filter($schema->fields, fn (FieldDefinition $field): bool => $field->isFillable()));
         $outcomes = array_combine(
             array_map(fn (FieldDefinition $field): string => $field->name, $fillable),

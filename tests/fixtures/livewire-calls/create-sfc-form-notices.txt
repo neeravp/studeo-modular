@@ -9,6 +9,7 @@ isDirectory <modules>/Blog true
 isFile <modules>/Blog/Actions/CreatePostAction.php false
 exists <modules>/Blog/Data/CreatePostInput.php true
 ensureDirectoryExists <modules>/Blog/Actions
+glob <modules>/Blog/Models/*.php
 get <package>/Console/stubs/action.stub
 put <modules>/Blog/Actions/CreatePostAction.php
 ensureDirectoryExists <modules>/Blog/Livewire/Forms/Posts

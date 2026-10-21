@@ -5,6 +5,8 @@ use Studeo\Modular\Support\FakerDefinitionResolver;
 use Studeo\Modular\Support\MigrationColumnResolver;
 use Studeo\Modular\Support\ModelStubContent;
 use Studeo\Modular\Support\PhpImports;
+use Studeo\Modular\Support\Schema\ForeignKeyFaker;
+use Studeo\Modular\Support\Schema\ModuleModels;
 
 beforeEach(function () {
     $this->parser = new ParseSchemaAction;
@@ -53,7 +55,7 @@ YAML;
             "\$table->json('metadata')->nullable();",
             "\$table->foreignId('user_id')->constrained()->cascadeOnDelete();"
         )
-        ->and(FakerDefinitionResolver::definition($schema, moduleWithModels([]), 'App\Models\User')->attributes)->toMatchArray([
+        ->and(FakerDefinitionResolver::definition($schema, new ForeignKeyFaker(new ModuleModels, moduleWithModels([]), 'App\Models\User'))->attributes)->toMatchArray([
             'title' => 'fake()->sentence()',
             'is_active' => 'fake()->boolean()',
             'user_id' => "fn () => config('auth.providers.users.model')::factory()",

@@ -2,6 +2,7 @@
 
 namespace Studeo\Modular\Support\Schema;
 
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
 use Studeo\Modular\DataObjects\ModuleDefinition;
 
@@ -9,8 +10,10 @@ use Studeo\Modular\DataObjects\ModuleDefinition;
  * Where a module keeps its schema files: schema/{table}.yaml. The table of a model is derived
  * the way module:model derives it.
  */
-final class SchemaFiles
+final readonly class SchemaFiles
 {
+    public function __construct(private Filesystem $files = new Filesystem) {}
+
     public static function tableFor(string $model): string
     {
         return Str::snake(Str::pluralStudly($model));
@@ -26,9 +29,9 @@ final class SchemaFiles
      *
      * @return array<int, string>
      */
-    public static function tables(ModuleDefinition $module): array
+    public function tables(ModuleDefinition $module): array
     {
-        $files = glob(rtrim($module->path, '/').'/schema/*.yaml') ?: [];
+        $files = $this->files->glob(rtrim($module->path, '/').'/schema/*.yaml') ?: [];
         sort($files);
 
         return array_map(fn (string $file): string => basename($file, '.yaml'), $files);

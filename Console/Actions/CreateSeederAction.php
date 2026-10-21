@@ -20,6 +20,7 @@ final class CreateSeederAction
         private readonly StubRenderer $stubRenderer,
         private readonly ModuleGuard $moduleGuard,
         private readonly ArtifactWriter $artifactWriter,
+        private readonly ModuleModels $models,
     ) {}
 
     public function execute(
@@ -100,7 +101,7 @@ final class CreateSeederAction
     {
         return $modelDefinition !== null
             && $modelDefinition->namespace === "{$module->namespace}\\Models"
-            && ModuleModels::hasFactory($module, $modelDefinition->class);
+            && $this->models->hasFactory($module, $modelDefinition->class);
     }
 
     public function seederPath(ModuleDefinition $module, string $seederName): string

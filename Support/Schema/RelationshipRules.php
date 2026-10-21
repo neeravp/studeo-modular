@@ -22,6 +22,8 @@ final class RelationshipRules
 
     private const string CLASS_NAME = '/^\\\\?[A-Z][A-Za-z0-9]*(\\\\[A-Z][A-Za-z0-9]*)*$/';
 
+    public function __construct(private readonly ModuleModels $models = new ModuleModels) {}
+
     /**
      * @param  array<int, string>  $fieldNames  the schema's field names, for the foreign key check
      * @return array<int, SchemaIssue>
@@ -97,7 +99,7 @@ final class RelationshipRules
             return [];
         }
 
-        $models = ModuleModels::names($module);
+        $models = $this->models->names($module);
         $known = $models === [] ? 'The module has no models yet.' : "The module's models: ".implode(', ', $models).'.';
 
         return in_array($model, $models, true)

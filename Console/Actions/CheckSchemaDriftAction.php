@@ -12,6 +12,8 @@ use Studeo\Modular\Support\FakerDefinitionResolver;
 use Studeo\Modular\Support\MigrationColumnResolver;
 use Studeo\Modular\Support\ModelStubContent;
 use Studeo\Modular\Support\Schema\DtoProperties;
+use Studeo\Modular\Support\Schema\ForeignKeyFaker;
+use Studeo\Modular\Support\Schema\ModuleModels;
 use Studeo\Modular\Support\Schema\PhpSectionReader;
 use Studeo\Modular\Support\SchemaWarnings;
 
@@ -32,6 +34,7 @@ final class CheckSchemaDriftAction
         private readonly ParseSchemaAction $parser,
         private readonly PhpSectionReader $reader,
         private readonly SchemaWarnings $warnings,
+        private readonly ModuleModels $models,
     ) {}
 
     /**
@@ -103,7 +106,7 @@ final class CheckSchemaDriftAction
         $file = "database/factories/{$model}Factory.php";
         $source = $this->source($module, $file);
 
-        $definition = FakerDefinitionResolver::definition($schema, $module, config('auth.providers.users.model'));
+        $definition = FakerDefinitionResolver::definition($schema, new ForeignKeyFaker($this->models, $module, config('auth.providers.users.model')));
         $found = $source === null ? null : $this->reader->factoryKeys($source);
 
         return $this->compareNames($file, 'definition', array_keys($definition->attributes), $found === null ? null : array_values(array_diff($found, array_keys($definition->omitted))));
