@@ -1,0 +1,19 @@
+isDirectory <modules>/Blog true
+isDirectory <modules>/Blog/Livewire false
+exists <modules>/Blog/resources/views/layouts/admin.blade.php false
+ensureDirectoryExists <modules>/Blog/resources/views/layouts
+get <package>/Console/stubs/livewire.layout.blade.php.stub
+put <modules>/Blog/resources/views/layouts/admin.blade.php
+ensureDirectoryExists <modules>/Blog/Livewire/Pages
+get <package>/Console/stubs/livewire.classic.php.stub
+put <modules>/Blog/Livewire/Pages/PostList.php
+ensureDirectoryExists <modules>/Blog/resources/views/livewire/pages
+get <package>/Console/stubs/livewire.classic.blade.php.stub
+put <modules>/Blog/resources/views/livewire/pages/post-list.blade.php
+ensureDirectoryExists <modules>/Blog/tests/Feature/Livewire/Pages
+get <package>/Console/stubs/livewire.test.php.stub
+put <modules>/Blog/tests/Feature/Livewire/Pages/PostListTest.php
+isDirectory <modules>/Blog/Livewire true
+allFiles <modules>/Blog/Livewire
+isFile <modules>/Blog/resources/views/livewire/pages/post-list.blade.php true
+isFile <modules>/Blog/tests/Feature/Livewire/Pages/PostListTest.php true

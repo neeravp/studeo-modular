@@ -1,0 +1,2 @@
+isDirectory <modules>/Blog true
+isDirectory <modules>/Blog/Livewire false

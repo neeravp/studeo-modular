@@ -1,0 +1,9 @@
+isDirectory <modules>/Blog true
+isDirectory <modules>/Blog/Livewire false
+ensureDirectoryExists <modules>/Blog/Livewire
+get <package>/Console/stubs/livewire.classic.php.stub
+put <modules>/Blog/Livewire/PostList.php
+isDirectory <modules>/Blog/Livewire true
+allFiles <modules>/Blog/Livewire
+isFile <modules>/Blog/resources/views/livewire/post-list.blade.php false
+isFile <modules>/Blog/tests/Feature/Livewire/PostListTest.php false

@@ -1,0 +1,25 @@
+isDirectory <modules>/Blog true
+isDirectory <modules>/Blog/Livewire false
+isFile <modules>/Blog/Livewire/Forms/Posts/CreateForm.php false
+isFile <modules>/Blog/Actions/CreatePostAction.php false
+isFile <modules>/Blog/Data/CreatePostInput.php true
+isFile <modules>/Blog/Actions/CreatePostAction.php false
+isFile <modules>/Blog/Actions/CreatePostAction.php false
+isDirectory <modules>/Blog true
+isFile <modules>/Blog/Actions/CreatePostAction.php false
+exists <modules>/Blog/Data/CreatePostInput.php true
+ensureDirectoryExists <modules>/Blog/Actions
+get <package>/Console/stubs/action.stub
+put <modules>/Blog/Actions/CreatePostAction.php
+ensureDirectoryExists <modules>/Blog/Livewire/Forms/Posts
+get <package>/Console/stubs/livewire.form.php.stub
+put <modules>/Blog/Livewire/Forms/Posts/CreateForm.php
+ensureDirectoryExists <modules>/Blog/Livewire/Posts
+get <package>/Console/stubs/livewire.sfc.form.blade.php.stub
+put <modules>/Blog/Livewire/Posts/⚡create.blade.php
+ensureDirectoryExists <modules>/Blog/tests/Feature/Livewire/Posts
+get <package>/Console/stubs/livewire.test.php.stub
+put <modules>/Blog/tests/Feature/Livewire/Posts/CreateTest.php
+isDirectory <modules>/Blog/Livewire true
+allFiles <modules>/Blog/Livewire
+isFile <modules>/Blog/tests/Feature/Livewire/Posts/CreateTest.php true

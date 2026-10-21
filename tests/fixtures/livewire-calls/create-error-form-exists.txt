@@ -1,0 +1,4 @@
+isDirectory <modules>/Blog true
+isDirectory <modules>/Blog/Livewire true
+allFiles <modules>/Blog/Livewire
+isFile <modules>/Blog/Livewire/Forms/Posts/CreateForm.php true

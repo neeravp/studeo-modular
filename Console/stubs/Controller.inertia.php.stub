@@ -1,0 +1,34 @@
+<?php
+
+namespace {{ namespace }};
+
+{{ imports }}
+
+class {{ class }}
+{
+    public function index()
+    {
+        return Inertia::render('{{ module }}::{{ resource }}/Index');
+    }
+
+    public function create()
+    {
+        return Inertia::render('{{ module }}::{{ resource }}/Create');
+    }
+
+    public function store(Request {{ request }}) {}
+
+    public function show({{ binding }})
+    {
+        return Inertia::render('{{ module }}::{{ resource }}/Show');
+    }
+
+    public function edit({{ binding }})
+    {
+        return Inertia::render('{{ module }}::{{ resource }}/Edit');
+    }
+
+    public function update(Request {{ request }}, {{ binding }}) {}
+
+    public function destroy({{ binding }}) {}
+}

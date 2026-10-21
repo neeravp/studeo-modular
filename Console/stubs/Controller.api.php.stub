@@ -1,0 +1,18 @@
+<?php
+
+namespace {{ namespace }};
+
+{{ imports }}
+
+class {{ class }}
+{
+    public function index() {}
+
+    public function store(Request {{ request }}) {}
+
+    public function show({{ binding }}) {}
+
+    public function update(Request {{ request }}, {{ binding }}) {}
+
+    public function destroy({{ binding }}) {}
+}

@@ -1,0 +1,8 @@
+<?php
+
+{{ imports }}
+
+new {{ attributes }}class extends {{ component }} {};
+?>
+
+<div></div>

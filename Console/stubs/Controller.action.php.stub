@@ -1,0 +1,18 @@
+<?php
+
+namespace {{ namespace }};
+
+{{ imports }}
+
+class {{ class }}
+{
+    public function __invoke(Request $request, {{ action }} $action)
+    {
+        $actor = $request->user() ?? abort(401);
+        $input = {{ input }}::fromRequest($request{{ context }});
+
+        $action($input, $actor);
+
+        return back();
+    }
+}

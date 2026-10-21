@@ -1,0 +1,4 @@
+isDirectory <modules>/Account true
+isDirectory <modules>/Account/Models true
+files <modules>/Account/Models
+isFile <modules>/Account/Models/FlightPassenger.php true

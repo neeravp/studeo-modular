@@ -1,0 +1,21 @@
+<?php
+
+namespace {moduleNamespace};
+
+use Illuminate\Support\ServiceProvider;
+use Studeo\Modular\Support\ModuleRegistrar;
+
+class {moduleName}ServiceProvider extends ServiceProvider
+{
+    public function register(): void
+    {
+        ModuleRegistrar::for($this, __DIR__)->config();
+    }
+
+    public function boot(): void
+    {
+        ModuleRegistrar::for($this, __DIR__)
+            ->routes()->views()->migrations()->translations()
+            ->commands()->listeners()->policies()->middleware()->livewire();
+    }
+}

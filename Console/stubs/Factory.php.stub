@@ -1,0 +1,28 @@
+<?php
+
+namespace {{ factoryNamespace }};
+
+{{ imports }}
+
+/**
+ * @extends {{ base }}<{{ model }}>
+ */
+class {{ factory }} extends {{ base }}
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var class-string<{{ model }}>
+     */
+    protected $model = {{ model }}::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
+    public function definition(): array
+    {
+        return {{ definition }};
+    }
+}

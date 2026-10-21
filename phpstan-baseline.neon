@@ -1,0 +1,127 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Cannot call method getParts\(\) on PhpParser\\Node\\Name\|null\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: Check/Rules/FlatModules.php
+
+		-
+			message: '#^Cannot call method toString\(\) on PhpParser\\Node\\Name\|null\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: Check/Rules/FlatModules.php
+
+		-
+			message: '#^Parameter \#3 \$schema of method Studeo\\Modular\\Console\\Actions\\WriteLivewireFormAction\:\:execute\(\) expects Studeo\\Modular\\DataObjects\\SchemaDefinition, Studeo\\Modular\\DataObjects\\SchemaDefinition\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Console/Actions/CreateLivewireComponentAction.php
+
+		-
+			message: '#^Parameter \#3 \$schema of method Studeo\\Modular\\Console\\Actions\\WriteFormActionAction\:\:execute\(\) expects Studeo\\Modular\\DataObjects\\SchemaDefinition, Studeo\\Modular\\DataObjects\\SchemaDefinition\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Console/Actions/CreateVueComponentAction.php
+
+		-
+			message: '#^Method Studeo\\Modular\\Console\\Actions\\MoveLivewireClassicComponentAction\:\:rewriteClassName\(\) should return string but returns string\|null\.$#'
+			identifier: return.type
+			count: 1
+			path: Console/Actions/MoveLivewireClassicComponentAction.php
+
+		-
+			message: '#^Property Studeo\\Modular\\Console\\Actions\\WriteFormActionAction\:\:\$files is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: Console/Actions/WriteFormActionAction.php
+
+		-
+			message: '#^Method Studeo\\Modular\\Console\\ModulePivotCommand\:\:promptForModels\(\) should return array\{string, string\|null\} but returns list\<int\|string\>\.$#'
+			identifier: return.type
+			count: 1
+			path: Console/ModulePivotCommand.php
+
+		-
+			message: '#^Cannot cast array\<string\>\|string to string\.$#'
+			identifier: cast.string
+			count: 1
+			path: Console/Prompts/LivewireComponentInputResolver.php
+
+		-
+			message: '#^Method Studeo\\Modular\\Console\\Prompts\\LivewireComponentInputResolver\:\:promptForLivewireComponent\(\) should return Studeo\\Modular\\DataObjects\\LivewireComponentDefinition but returns Studeo\\Modular\\DataObjects\\LivewireComponentDefinition\|null\.$#'
+			identifier: return.type
+			count: 1
+			path: Console/Prompts/LivewireComponentInputResolver.php
+
+		-
+			message: '#^Cannot cast array\<string\>\|bool\|string to string\.$#'
+			identifier: cast.string
+			count: 1
+			path: Console/Prompts/ModulePicker.php
+
+		-
+			message: '#^Cannot cast array\<string\>\|string to string\.$#'
+			identifier: cast.string
+			count: 1
+			path: Console/Prompts/VueComponentInputResolver.php
+
+		-
+			message: '#^Cannot call method getName\(\) on ReflectionType\|null\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: Support/DataObject.php
+
+		-
+			message: '#^Parameter \#1 \$className of static method Studeo\\Modular\\Support\\DataObject\:\:castToClass\(\) expects string, class\-string\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Support/DataObject.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: Support/DataObject.php
+
+		-
+			message: '#^Parameter \#2 \$haystack of function in_array expects array, array\|\(callable\)\|class\-string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Support/ModuleRegistrar.php
+
+		-
+			message: '#^Parameter \#2 \$listener of method Illuminate\\Events\\Dispatcher\:\:listen\(\) expects array\|\(callable\(\)\: mixed\)\|class\-string\|Illuminate\\Events\\QueuedClosure\|null, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Support/ModuleRegistrar.php
+
+		-
+			message: '#^Method Studeo\\Modular\\Support\\ModuleScanner\:\:middleware\(\) should return array\<string, class\-string\> but returns array\<string, string\>\.$#'
+			identifier: return.type
+			count: 1
+			path: Support/ModuleScanner.php
+
+		-
+			message: '#^Method Studeo\\Modular\\Support\\ModuleScanner\:\:policies\(\) should return array\<class\-string, class\-string\> but returns array\<string, class\-string\>\.$#'
+			identifier: return.type
+			count: 1
+			path: Support/ModuleScanner.php
+
+		-
+			message: '#^Method Studeo\\Modular\\Support\\ModuleScanner\:\:policies\(\) should return array\<class\-string, class\-string\> but returns array\<string, string\>\.$#'
+			identifier: return.type
+			count: 1
+			path: Support/ModuleScanner.php
+
+		-
+			message: '#^Offset ''cases'' might not exist on array\{declared\: bool, backing\: string\|null, cases\: array\<string, string\|null\>\}\|null\.$#'
+			identifier: offsetAccess.notFound
+			count: 1
+			path: Support/Schema/EnumRules.php
+
+		-
+			message: '#^Parameter \#3 \$info of method Studeo\\Modular\\Support\\Schema\\EnumRules\:\:backing\(\) expects array\{backing\: string\|null, cases\: array\<string, string\|null\>\}, array\{declared\: bool, backing\: string\|null, cases\: array\<string, string\|null\>\}\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Support/Schema/EnumRules.php

@@ -1,0 +1,6 @@
+isDirectory <modules>/Account true
+isFile <modules>/Account/Models/FlightPassenger.php false
+ensureDirectoryExists <modules>/Account/Models
+get <package>/Console/stubs/Pivot.php.stub
+put <modules>/Account/Models/FlightPassenger.php
+isDirectory <modules>/Account true

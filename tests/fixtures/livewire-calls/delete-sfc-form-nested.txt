@@ -1,0 +1,27 @@
+isDirectory <modules>/Blog true
+isDirectory <modules>/Blog/Livewire true
+allFiles <modules>/Blog/Livewire
+isFile <modules>/Blog/tests/Feature/Livewire/Posts/CreateTest.php true
+isFile <modules>/Blog/Livewire/Forms/Posts/CreateForm.php true
+get <modules>/Blog/Livewire/Posts/⚡create.blade.php
+allFiles <modules>/Blog
+get <modules>/Blog/Actions/CreatePostAction.php
+get <modules>/Blog/BlogServiceProvider.php
+get <modules>/Blog/Data/CreatePostInput.php
+get <modules>/Blog/Enums/PostStatus.php
+get <modules>/Blog/config/blog.php
+get <modules>/Blog/routes/web.php
+isFile <modules>/Blog/Livewire/Posts/⚡create.blade.php true
+delete <modules>/Blog/Livewire/Posts/⚡create.blade.php
+allFiles <modules>/Blog/Livewire/Posts
+directories <modules>/Blog/Livewire/Posts
+deleteDirectory <modules>/Blog/Livewire/Posts
+isFile <modules>/Blog/tests/Feature/Livewire/Posts/CreateTest.php true
+delete <modules>/Blog/tests/Feature/Livewire/Posts/CreateTest.php
+allFiles <modules>/Blog/tests/Feature/Livewire/Posts
+directories <modules>/Blog/tests/Feature/Livewire/Posts
+deleteDirectory <modules>/Blog/tests/Feature/Livewire/Posts
+delete <modules>/Blog/Livewire/Forms/Posts/CreateForm.php
+allFiles <modules>/Blog/Livewire/Forms/Posts
+directories <modules>/Blog/Livewire/Forms/Posts
+deleteDirectory <modules>/Blog/Livewire/Forms/Posts

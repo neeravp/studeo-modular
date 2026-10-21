@@ -1,0 +1,19 @@
+isDirectory <modules>/Blog true
+isDirectory <modules>/Blog/Livewire true
+allFiles <modules>/Blog/Livewire
+files <modules>/Blog/Livewire/Admin/⚡post-list
+isFile <modules>/Blog/Livewire/Admin/⚡post-list/post-list.blade.php true
+delete <modules>/Blog/Livewire/Admin/⚡post-list/post-list.blade.php
+allFiles <modules>/Blog/Livewire/Admin/⚡post-list
+isFile <modules>/Blog/Livewire/Admin/⚡post-list/post-list.php true
+delete <modules>/Blog/Livewire/Admin/⚡post-list/post-list.php
+allFiles <modules>/Blog/Livewire/Admin/⚡post-list
+isFile <modules>/Blog/Livewire/Admin/⚡post-list/post-list.test.php true
+delete <modules>/Blog/Livewire/Admin/⚡post-list/post-list.test.php
+allFiles <modules>/Blog/Livewire/Admin/⚡post-list
+directories <modules>/Blog/Livewire/Admin/⚡post-list
+deleteDirectory <modules>/Blog/Livewire/Admin/⚡post-list
+allFiles <modules>/Blog/Livewire/Admin
+directories <modules>/Blog/Livewire/Admin
+deleteDirectory <modules>/Blog/Livewire/Admin
+isDirectory <modules>/Blog/Livewire/Admin/⚡post-list false

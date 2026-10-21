@@ -1,0 +1,40 @@
+<?php
+
+namespace {{ namespace }};
+
+{{ imports }}
+
+/**
+ * @property int $id
+ * @property ?{{ carbon }} $created_at
+ * @property ?{{ carbon }} $updated_at
+{{ properties }} */
+class {{ class }} extends {{ model }}
+{
+{{ traits }}    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = '{{ table }}';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var list<string>
+     */
+    protected $fillable = {{ fillable }};
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'created_at' => 'immutable_datetime',
+            'updated_at' => 'immutable_datetime',{{ casts }}
+        ];
+    }
+{{ methods }}}

@@ -1,0 +1,12 @@
+isDirectory <modules>/Account true
+isFile <modules>/Account/module.json true
+isFile <modules>/Account/module.json true
+get <modules>/Account/module.json
+isFile <modules>/Account/AccountServiceProvider.php true
+get <modules>/Account/AccountServiceProvider.php
+get <modules>/Account/AccountServiceProvider.php
+isFile <package>/vendor/orchestra/testbench-core/laravel/composer.json true
+get <package>/vendor/orchestra/testbench-core/laravel/composer.json
+isFile <package>/vendor/orchestra/testbench-core/laravel/composer.json true
+get <package>/vendor/orchestra/testbench-core/laravel/composer.json
+put <package>/vendor/orchestra/testbench-core/laravel/composer.json

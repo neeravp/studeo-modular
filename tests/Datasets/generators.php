@@ -1,0 +1,3 @@
+<?php
+
+dataset('generators', generatorCases());

@@ -1,0 +1,30 @@
+<?php
+
+{{ imports }}
+
+new {{ attributes }}class extends {{ component }}
+{
+    {{ classBody }}
+};
+?>
+
+<div class="py-12">
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+            <h1 class="text-2xl font-bold mb-6">{{ title }}</h1>
+
+            <form wire:submit="save" class="space-y-6">
+                {{ formFields }}
+
+                <div class="flex items-center justify-end gap-4">
+                    <button
+                        type="submit"
+                        class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 disabled:opacity-50"
+                    >
+                        Save
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

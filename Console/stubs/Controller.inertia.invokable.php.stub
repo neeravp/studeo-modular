@@ -1,0 +1,13 @@
+<?php
+
+namespace {{ namespace }};
+
+{{ imports }}
+
+class {{ class }}
+{
+    public function __invoke(Request $request)
+    {
+        return Inertia::render('{{ module }}::{{ resource }}');
+    }
+}

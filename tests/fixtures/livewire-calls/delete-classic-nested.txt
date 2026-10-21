@@ -1,0 +1,29 @@
+isDirectory <modules>/Blog true
+isDirectory <modules>/Blog/Livewire true
+allFiles <modules>/Blog/Livewire
+isFile <modules>/Blog/resources/views/livewire/admin/settings/profile.blade.php true
+isFile <modules>/Blog/tests/Feature/Livewire/Admin/Settings/ProfileTest.php true
+isFile <modules>/Blog/Livewire/Admin/Settings/Profile.php true
+delete <modules>/Blog/Livewire/Admin/Settings/Profile.php
+allFiles <modules>/Blog/Livewire/Admin/Settings
+directories <modules>/Blog/Livewire/Admin/Settings
+deleteDirectory <modules>/Blog/Livewire/Admin/Settings
+allFiles <modules>/Blog/Livewire/Admin
+directories <modules>/Blog/Livewire/Admin
+deleteDirectory <modules>/Blog/Livewire/Admin
+isFile <modules>/Blog/resources/views/livewire/admin/settings/profile.blade.php true
+delete <modules>/Blog/resources/views/livewire/admin/settings/profile.blade.php
+allFiles <modules>/Blog/resources/views/livewire/admin/settings
+directories <modules>/Blog/resources/views/livewire/admin/settings
+deleteDirectory <modules>/Blog/resources/views/livewire/admin/settings
+allFiles <modules>/Blog/resources/views/livewire/admin
+directories <modules>/Blog/resources/views/livewire/admin
+deleteDirectory <modules>/Blog/resources/views/livewire/admin
+isFile <modules>/Blog/tests/Feature/Livewire/Admin/Settings/ProfileTest.php true
+delete <modules>/Blog/tests/Feature/Livewire/Admin/Settings/ProfileTest.php
+allFiles <modules>/Blog/tests/Feature/Livewire/Admin/Settings
+directories <modules>/Blog/tests/Feature/Livewire/Admin/Settings
+deleteDirectory <modules>/Blog/tests/Feature/Livewire/Admin/Settings
+allFiles <modules>/Blog/tests/Feature/Livewire/Admin
+directories <modules>/Blog/tests/Feature/Livewire/Admin
+deleteDirectory <modules>/Blog/tests/Feature/Livewire/Admin

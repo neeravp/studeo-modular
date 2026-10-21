@@ -1,0 +1,34 @@
+isDirectory <modules>/Blog true
+isDirectory <modules>/Blog/Livewire false
+isFile <modules>/Blog/Livewire/Forms/Pages/PostListForm.php false
+isFile <modules>/Blog/Actions/CreatePostAction.php false
+isFile <modules>/Blog/Data/CreatePostInput.php false
+isFile <modules>/Blog/Actions/CreatePostAction.php false
+isFile <modules>/Blog/Actions/CreatePostAction.php false
+exists <modules>/Blog/resources/views/layouts/app.blade.php false
+ensureDirectoryExists <modules>/Blog/resources/views/layouts
+get <package>/Console/stubs/livewire.layout.blade.php.stub
+put <modules>/Blog/resources/views/layouts/app.blade.php
+isDirectory <modules>/Blog true
+isFile <modules>/Blog/Actions/CreatePostAction.php false
+exists <modules>/Blog/Data/CreatePostInput.php false
+isDirectory <modules>/Blog true
+isFile <modules>/Blog/Data/CreatePostInput.php false
+get <package>/Console/stubs/dto.input.stub
+ensureDirectoryExists <modules>/Blog/Data
+put <modules>/Blog/Data/CreatePostInput.php
+ensureDirectoryExists <modules>/Blog/Actions
+get <package>/Console/stubs/action.stub
+put <modules>/Blog/Actions/CreatePostAction.php
+ensureDirectoryExists <modules>/Blog/Livewire/Forms/Pages
+get <package>/Console/stubs/livewire.form.php.stub
+put <modules>/Blog/Livewire/Forms/Pages/PostListForm.php
+ensureDirectoryExists <modules>/Blog/Livewire/Pages
+get <package>/Console/stubs/livewire.sfc.form.blade.php.stub
+put <modules>/Blog/Livewire/Pages/⚡post-list.blade.php
+ensureDirectoryExists <modules>/Blog/tests/Feature/Livewire/Pages
+get <package>/Console/stubs/livewire.test.php.stub
+put <modules>/Blog/tests/Feature/Livewire/Pages/PostListTest.php
+isDirectory <modules>/Blog/Livewire true
+allFiles <modules>/Blog/Livewire
+isFile <modules>/Blog/tests/Feature/Livewire/Pages/PostListTest.php true

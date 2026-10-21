@@ -1,0 +1,11 @@
+isDirectory <modules>/Account true
+isDirectory <modules>/Account/Models true
+files <modules>/Account/Models
+isFile <modules>/Account/Models/FlightPassenger.php false
+ensureDirectoryExists <modules>/Account/Models
+get <package>/Console/stubs/Pivot.php.stub
+put <modules>/Account/Models/FlightPassenger.php
+isDirectory <modules>/Account true
+ensureDirectoryExists <modules>/Account/database/migrations
+get <package>/Console/stubs/migration.pivot.php.stub
+put <modules>/Account/database/migrations/<timestamp>_create_flight_passenger_table.php

@@ -1,0 +1,8 @@
+isFile <modules>/Account/module.json true
+isFile <modules>/Account/module.json true
+get <modules>/Account/module.json
+isFile <package>/vendor/orchestra/testbench-core/laravel/composer.json true
+get <package>/vendor/orchestra/testbench-core/laravel/composer.json
+isFile <package>/vendor/orchestra/testbench-core/laravel/composer.json true
+get <package>/vendor/orchestra/testbench-core/laravel/composer.json
+put <package>/vendor/orchestra/testbench-core/laravel/composer.json

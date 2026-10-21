@@ -1,0 +1,13 @@
+<?php
+
+namespace {{ namespace }};
+
+{{ imports }}
+
+{{ docblock }}{{ attribute }}final class {{ class }}
+{
+    public function __invoke({{ input }} $input{{ actor_param }}): void
+    {
+{{ authorize }}        DB::transaction({{ transaction }});
+    }{{ guards }}
+}

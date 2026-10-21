@@ -1,0 +1,9 @@
+isDirectory <modules>/Account true
+isFile <modules>/Account/Models/PostTag.php false
+ensureDirectoryExists <modules>/Account/Models
+get <package>/Console/stubs/Pivot.morph.php.stub
+put <modules>/Account/Models/PostTag.php
+isDirectory <modules>/Account true
+ensureDirectoryExists <modules>/Account/database/migrations
+get <package>/Console/stubs/migration.pivot.morph.php.stub
+put <modules>/Account/database/migrations/<timestamp>_create_post_tag_table.php

@@ -1,0 +1,42 @@
+<?php
+
+namespace {{ namespace }};
+
+{{ imports }}
+
+class {{ class }} extends Form
+{
+    public const array NULLABLE = [{{ nullable }}];
+{{ json_constant }}
+{{ properties }}
+
+    public function rules(): array
+    {
+        return {{ input }}::rules();
+    }
+{{ json_methods }}
+    public function toInput(array $context = []): {{ input }}
+    {
+        $state = {{ state }};
+
+        foreach (self::NULLABLE as $field) {
+            $state[$field] = $state[$field] === '' ? null : $state[$field];
+        }
+
+        return {{ input }}::fromValidated($state, $context);
+    }
+
+    public function addActionErrors(ValidationException $exception): void
+    {
+        foreach ($exception->errors() as $field => $messages) {
+            $this->addFieldErrors($field, $messages);
+        }
+    }
+
+    private function addFieldErrors(string|int $field, array $messages): void
+    {
+        foreach ($messages as $message) {
+            $this->addError($field, $message);
+        }
+    }
+}

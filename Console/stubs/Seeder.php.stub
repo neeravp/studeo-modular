@@ -1,0 +1,13 @@
+<?php
+
+namespace {{ seederNamespace }};
+
+{{ imports }}
+
+class {{ seeder }} extends {{ base }}
+{
+    /**
+     * Run the database seeds.
+     */
+    public function run(): void{{ body }}
+}

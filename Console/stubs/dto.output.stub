@@ -1,0 +1,10 @@
+<?php
+
+namespace {{ namespace }};
+
+use Studeo\Modular\Support\OutputData;
+
+final readonly class {{ class }} extends OutputData
+{
+    public function __construct() {}
+}

@@ -1,0 +1,15 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+    - phpstan-baseline.neon
+
+parameters:
+    level: 8
+    paths:
+        - Check
+        - Console
+        - DataObjects
+        - Enums
+        - Exceptions
+        - Providers
+        - Support
+        - config

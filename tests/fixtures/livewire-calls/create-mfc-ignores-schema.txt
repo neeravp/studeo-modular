@@ -1,0 +1,12 @@
+isDirectory <modules>/Blog true
+isDirectory <modules>/Blog/Livewire false
+ensureDirectoryExists <modules>/Blog/Livewire/⚡post-list
+get <package>/Console/stubs/livewire.mfc.php.stub
+put <modules>/Blog/Livewire/⚡post-list/post-list.php
+get <package>/Console/stubs/livewire.mfc.blade.php.stub
+put <modules>/Blog/Livewire/⚡post-list/post-list.blade.php
+get <package>/Console/stubs/livewire.test.php.stub
+put <modules>/Blog/Livewire/⚡post-list/post-list.test.php
+isDirectory <modules>/Blog/Livewire true
+allFiles <modules>/Blog/Livewire
+files <modules>/Blog/Livewire/⚡post-list

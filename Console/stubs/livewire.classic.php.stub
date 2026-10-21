@@ -1,0 +1,13 @@
+<?php
+
+namespace {{ namespace }};
+
+{{ imports }}
+
+{{ attributes }}class {{ class }} extends {{ component }}
+{
+    public function render()
+    {
+        return {{ renderContent }};
+    }
+}

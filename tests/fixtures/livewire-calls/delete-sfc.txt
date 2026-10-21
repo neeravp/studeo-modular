@@ -1,0 +1,9 @@
+isDirectory <modules>/Blog true
+isDirectory <modules>/Blog/Livewire true
+allFiles <modules>/Blog/Livewire
+isFile <modules>/Blog/tests/Feature/Livewire/QuickStatusTest.php true
+isFile <modules>/Blog/Livewire/Forms/QuickStatusForm.php false
+isFile <modules>/Blog/Livewire/⚡quick-status.blade.php true
+delete <modules>/Blog/Livewire/⚡quick-status.blade.php
+isFile <modules>/Blog/tests/Feature/Livewire/QuickStatusTest.php true
+delete <modules>/Blog/tests/Feature/Livewire/QuickStatusTest.php
