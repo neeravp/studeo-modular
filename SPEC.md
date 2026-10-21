@@ -74,7 +74,9 @@ A module whose provider fails to load never breaks `artisan`: the console warns 
 | Frontend | `module:livewire`, `module:livewire:move`, `module:livewire:delete`, `module:vue`, `module:vue:move`, `module:vue:delete` |
 | Cache | `modular:cache`, `modular:clear`, and the hidden `modular:optimize` that the `optimize` command runs |
 
-- Options are long-form. The only shortcuts are `-r` (`module:controller --resource`), `-p` (`module:vue --page`, and on `module:vue:delete` and `module:vue:move`) and `-f` (`module:vue --form`).
+<!-- generated:shortcuts -->
+- Options are long-form. The only shortcuts are `-f` (`module:vue --form`), `-p` (`module:vue --page`, and on `module:vue:delete` and `module:vue:move`) and `-r` (`module:controller --resource`).
+<!-- /generated:shortcuts -->
 - A command that takes `--module` and is given none uses the module picker: no modules is an error with a hint to run `module:make`; exactly one module is used and a line says so; several are offered through a selection.
 - Directories without a usable manifest are never offered.
 
