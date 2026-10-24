@@ -8,9 +8,10 @@ use InvalidArgumentException;
 use Laravel\Prompts\Prompt;
 use RuntimeException;
 use Studeo\Check\Engine\CheckResult;
-use Studeo\Check\Engine\Violation;
 use Studeo\Modular\Console\Actions\CheckModulesAction;
 use Studeo\Modular\Console\Actions\DiscoverModulesAction;
+use Studeo\Modular\Console\Actions\FormatCheckFindingsAction;
+use Studeo\Modular\Console\Actions\ResolveModuleArgumentAction;
 use Studeo\Modular\Console\Actions\ResolveRuleSetAction;
 use Studeo\Modular\Console\Prompts\ModulePicker;
 use Studeo\Modular\DataObjects\ModuleDefinition;
@@ -22,31 +23,39 @@ class ModuleCheckCommand extends ModuleCommand
 {
     private const UNUSABLE = 2;
 
+    private const PICKER_LABEL = 'Which module should be checked?';
+
     protected $signature = 'module:check
-        {--module= : The name of the module}
-        {--all : Check every module}
+        {module? : The module name or its folder under the modules root}
+        {--all : Check every module without asking}
         {--format=text : How to print the findings: text or json}';
 
-    protected $description = 'Check a module against the architecture rules';
+    protected $description = 'Check one module, or every module, against the architecture rules';
 
     /**
+     * Which modules: the one given as a name or folder; otherwise every module when --all is passed
+     * or there is no terminal to ask in; otherwise the one chosen from a list that ends with All
+     * modules.
+     *
      * Exit 0 when there are no errors (warnings never fail), 1 for any error, 2 when a module
-     * cannot be read, a directory was skipped under --all, the rule configuration is invalid, or the
-     * check itself fails. With --format=json standard output holds only the findings array: on
-     * exit 2 from a failure it holds nothing, and every message goes to stderr.
+     * cannot be read, the argument is not a module, a directory was skipped while every module was
+     * checked, the rule configuration is invalid, or the check itself fails. With --format=json
+     * standard output holds only the findings array: on exit 2 from a failure it holds nothing, and
+     * every message goes to stderr.
      */
-    public function handle(ResolveRuleSetAction $ruleSets, CheckModulesAction $checker, DiscoverModulesAction $discovery, ModulePicker $picker): int
+    public function handle(ResolveRuleSetAction $ruleSets, CheckModulesAction $checker, DiscoverModulesAction $discovery, ModulePicker $picker, ResolveModuleArgumentAction $arguments, FormatCheckFindingsAction $format): int
     {
         try {
             $this->assertUsableOptions();
             $rules = $ruleSets->execute();
-            $result = $checker->execute($this->modulesToCheck($discovery, $picker), $rules);
+            $chosen = $this->chosenModule($picker, $arguments->execute($this->stringArgument('module')));
+            $result = $checker->execute($this->modulesToCheck($chosen, $discovery, $picker), $rules);
         } catch (Throwable $exception) {
             return $this->reportFailure($exception);
         }
 
-        $this->printFindings($result);
-        $skipped = $this->skippedDirectories($discovery);
+        $this->printFindings($format, $result);
+        $skipped = $this->skippedDirectories($chosen, $discovery);
         $this->reportSkipped($skipped);
 
         return $this->exitCode($result, $skipped);
@@ -85,21 +94,38 @@ class ModuleCheckCommand extends ModuleCommand
         }
 
         if ($this->asksForBoth()) {
-            throw new InvalidArgumentException('Pass either --module or --all, not both.');
+            throw new InvalidArgumentException('Pass either a module or --all, not both.');
         }
     }
 
     private function asksForBoth(): bool
     {
-        return $this->option('all') && $this->option('module') !== null;
+        return $this->option('all') && $this->argument('module') !== null;
     }
 
     /**
      * @return list<ModuleDefinition>
      */
-    private function modulesToCheck(DiscoverModulesAction $discovery, ModulePicker $picker): array
+    private function modulesToCheck(?ModuleDefinition $chosen, DiscoverModulesAction $discovery, ModulePicker $picker): array
     {
-        return $this->option('all') ? $this->everyModule($discovery, $picker) : [$this->readableModule($picker)];
+        return $chosen === null ? $this->everyModule($discovery, $picker) : [$this->readableModule($chosen)];
+    }
+
+    /**
+     * The one module to check; null means every module, whether asked for, chosen from the list or implied.
+     */
+    private function chosenModule(ModulePicker $picker, ?string $given): ?ModuleDefinition
+    {
+        return $this->isEveryModuleImplied() ? null : $this->pickModule($picker, $given);
+    }
+
+    /**
+     * Every module is checked without asking: --all was passed, or no module was given and there is
+     * no terminal to ask in.
+     */
+    private function isEveryModuleImplied(): bool
+    {
+        return $this->option('all') || ($this->argument('module') === null && ! $this->canPrompt());
     }
 
     /**
@@ -116,10 +142,8 @@ class ModuleCheckCommand extends ModuleCommand
         return array_values($modules);
     }
 
-    private function readableModule(ModulePicker $picker): ModuleDefinition
+    private function readableModule(ModuleDefinition $module): ModuleDefinition
     {
-        $module = $this->pickModule($picker);
-
         if (! is_file($module->path.'/'.ModuleManifest::FILE)) {
             throw new RuntimeException("Module [{$module->name}] has no ".ModuleManifest::FILE." in {$module->path}.");
         }
@@ -127,22 +151,22 @@ class ModuleCheckCommand extends ModuleCommand
         return $module;
     }
 
-    private function pickModule(ModulePicker $picker): ModuleDefinition
+    private function pickModule(ModulePicker $picker, ?string $given): ?ModuleDefinition
     {
         if (! $this->isJson()) {
-            return $picker->resolve($this, $this->scalarOption('module'));
+            return $picker->resolveOrAll($this, $given, self::PICKER_LABEL);
         }
 
-        return $this->pickModuleDrawingOnStderr($picker);
+        return $this->pickModuleDrawingOnStderr($picker, $given);
     }
 
-    private function pickModuleDrawingOnStderr(ModulePicker $picker): ModuleDefinition
+    private function pickModuleDrawingOnStderr(ModulePicker $picker, ?string $given): ?ModuleDefinition
     {
         $components = $this->components;
         $this->drawPromptsOn($this->output->getErrorStyle());
 
         try {
-            return $picker->resolve($this, $this->scalarOption('module'));
+            return $picker->resolveOrAll($this, $given, self::PICKER_LABEL);
         } finally {
             $this->components = $components;
             $this->restorePrompts();
@@ -159,11 +183,11 @@ class ModuleCheckCommand extends ModuleCommand
     }
 
     /**
-     * @return array<string, string> directory name => reason, only for --all
+     * @return array<string, string> directory name => reason, only when every module is checked
      */
-    private function skippedDirectories(DiscoverModulesAction $discovery): array
+    private function skippedDirectories(?ModuleDefinition $chosen, DiscoverModulesAction $discovery): array
     {
-        return $this->option('all') ? $discovery->skipped() : [];
+        return $chosen === null ? $discovery->skipped() : [];
     }
 
     /**
@@ -188,37 +212,13 @@ class ModuleCheckCommand extends ModuleCommand
         };
     }
 
-    private function printFindings(CheckResult $result): void
+    private function printFindings(FormatCheckFindingsAction $format, CheckResult $result): void
     {
-        if ($this->isJson()) {
-            $this->printJson($result);
+        $lines = $this->isJson() ? [$format->json($result)] : $format->text($result);
 
-            return;
+        foreach ($lines as $line) {
+            $this->line($line);
         }
-
-        $this->printText($result);
-    }
-
-    private function printJson(CheckResult $result): void
-    {
-        $this->line((string) json_encode(array_map(fn (Violation $violation): array => $violation->toArray(), $result->violations), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
-    }
-
-    private function printText(CheckResult $result): void
-    {
-        foreach ($result->violations as $violation) {
-            $this->line("{$violation->file}:{$violation->line} [{$violation->rule}] {$violation->message}");
-        }
-
-        $this->line($this->summary($result));
-    }
-
-    private function summary(CheckResult $result): string
-    {
-        $errors = $result->errorCount();
-        $warnings = $result->warningCount();
-
-        return "{$errors} ".($errors === 1 ? 'error' : 'errors').", {$warnings} ".($warnings === 1 ? 'warning' : 'warnings').'.';
     }
 
     private function isJson(): bool

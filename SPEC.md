@@ -85,7 +85,7 @@ A module whose provider fails to load never breaks `artisan`: the console warns 
 | Command | 0 | 1 | 2 |
 | --- | --- | --- | --- |
 | Every command except the two below | success | any failure (message on stderr, stack trace at `-v`; nothing printed under `--quiet`) | not used |
-| `module:check` | no errors; warnings never fail | at least one error | a module could not be read, a directory was skipped under `--all`, the rule configuration is invalid, `--module` was combined with `--all`, `--format` is unknown, or the check failed |
+| `module:check` | no errors; warnings never fail | at least one error | a module could not be read, the argument is not a module, a directory was skipped while every module was checked, the rule configuration is invalid, a module was combined with `--all`, `--format` is unknown, or the check failed |
 | `module:schema:check` | no drift | drift, or a section it cannot verify | the schema is invalid or missing |
 
 ### Without a terminal
@@ -129,6 +129,9 @@ A schema is a CLI string, inline YAML or JSON, a file path, or `@name` (`modules
 ## 8. `module:check`
 
 - Rules: those of Check's `Cap1Rules`, `ActionRules` and `LaravelRules` profiles, plus `module-isolation`, `flat-modules` and `controller-shape`, in `Studeo\Modular\Check\DefaultRules`.
+- Which modules: the one given as the argument; otherwise every module when `--all` is passed or there is no terminal to ask in; otherwise the one chosen from a list that ends with `All modules`. A single module is used without asking. A module together with `--all` is refused.
+- The argument is a module name, or the folder of a module directly under the modules root, relative to the application or in full. It must be the exact name of a directory under the root. Anything else exits 2 with a message that names the modules that exist and writes nothing to standard output.
+- Directories under the modules root that are not usable modules are reported on standard error, and the run exits 2, only when every module is checked, however that was decided. A run for one module ignores them. Every module's namespace is known to the rules whichever modules are checked.
 - `config('modular.check.rules')` names a class whose `rules()` returns a `RuleSet`. It is built only inside `module:check`. There is one rule set for the whole application and no baseline for application modules.
 - Output is one line per finding, `path:line [rule] message`, or with `--format=json` a findings array on standard output; every other message goes to standard error. The format is Check's.
 - The command parses files and never loads module code.

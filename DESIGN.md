@@ -55,7 +55,7 @@ Methods are a list of same-level steps with named helpers; compound conditions g
 
 ### 10. Fail loudly and name the fix
 
-A command that needs an answer it cannot ask for stops with a message that names the missing argument and shows one full example; it writes nothing. A module that fails to load is reported with the cause and never breaks the console. A given value is never "missing": `0` is a value.
+A command that needs an answer it cannot ask for stops with a message that names the missing argument and shows one full example; it writes nothing. A module that fails to load is reported with the cause and never breaks the console. A given value is never "missing": `0` is a value. A command whose natural default is every module (`module:install`, `module:check`) acts on all of them when there is no terminal to ask in, because that is documented, not guessed.
 *Why:* silence and guessing waste more time than an error message.
 
 ### 11. One definition, closed vocabulary

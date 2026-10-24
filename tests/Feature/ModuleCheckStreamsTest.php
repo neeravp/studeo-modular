@@ -54,16 +54,16 @@ it('prints nothing on stdout under --format=json for every exit 2 cause', functi
         ->and($process->getOutput())->toBe('')
         ->and($process->getErrorOutput())->not->toBe('');
 })->with([
-    'broken manifest' => [['--module=Blog'], []],
-    'both options' => [['--all', '--module=Other'], []],
-    'unexpected exception' => [['--module=Other'], ['CHECK_RULES' => 'Studeo\\Modular\\Tests\\CheckRules\\Explodes']],
-    'invalid rule set' => [['--module=Other'], ['CHECK_RULES' => 'Studeo\\Modular\\Tests\\CheckRules\\BadOptions']],
+    'broken manifest' => [['Blog'], []],
+    'both options' => [['--all', 'Other'], []],
+    'unexpected exception' => [['Other'], ['CHECK_RULES' => 'Studeo\\Modular\\Tests\\CheckRules\\Explodes']],
+    'invalid rule set' => [['Other'], ['CHECK_RULES' => 'Studeo\\Modular\\Tests\\CheckRules\\BadOptions']],
 ]);
 
-it('sends the module announcement to stderr under --format=json', function () {
+it('checks the only module without announcing it when there is no terminal', function () {
     $process = checkCommand($this->work, ['module:check', '--format=json']);
 
     expect($process->getExitCode())->toBe(0)
-        ->and($process->getOutput())->not->toContain('Using module')
-        ->and($process->getErrorOutput())->toContain('Using module [Blog].');
+        ->and(json_decode($process->getOutput(), true, flags: JSON_THROW_ON_ERROR))->toBe([])
+        ->and($process->getErrorOutput())->toBe('');
 });

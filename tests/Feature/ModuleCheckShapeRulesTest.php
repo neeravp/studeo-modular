@@ -28,7 +28,7 @@ function shapeSystemAction(string $invoke = 'public function __invoke(): void {}
 it('reports one seeded violation per shape rule as path:line [rule] and exits 1', function (array $files, string $expected) {
     seedModule($this, 'Blog', $files);
 
-    $process = checkCommand($this->work, ['module:check', '--module=Blog']);
+    $process = checkCommand($this->work, ['module:check', 'Blog']);
     $lines = explode("\n", $process->getOutput());
 
     expect($process->getExitCode())->toBe(1, checkOutput($process))
@@ -55,7 +55,7 @@ it('reports one seeded violation per shape rule as path:line [rule] and exits 1'
 it('prints the fix hint in each shape rule finding', function () {
     seedModule($this, 'Blog', ['Controllers/SeededController.php' => "<?php\n\nnamespace Blog\\Controllers;\n\nuse Illuminate\\Routing\\Controller;\n\nfinal class SeededController extends Controller {}\n"]);
 
-    $process = checkCommand($this->work, ['module:check', '--module=Blog']);
+    $process = checkCommand($this->work, ['module:check', 'Blog']);
 
     expect($process->getOutput())->toContain('a controller extends nothing')->toContain('Remove the base class');
 });
@@ -63,7 +63,7 @@ it('prints the fix hint in each shape rule finding', function () {
 it('reports a normal Action without the actor or the Gate call as [action-authorization]', function () {
     seedModule($this, 'Blog', ['Actions/PingAction.php' => "<?php\n\nnamespace Blog\\Actions;\n\nfinal class PingAction\n{\n    public function __invoke(): void {}\n}\n"]);
 
-    $process = checkCommand($this->work, ['module:check', '--module=Blog']);
+    $process = checkCommand($this->work, ['module:check', 'Blog']);
 
     expect($process->getExitCode())->toBe(1, checkOutput($process))
         ->and($process->getOutput())->toContain('modules/Blog/Actions/PingAction.php:5 [action-authorization]')->toContain('Gate::forUser')

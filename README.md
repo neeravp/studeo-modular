@@ -97,7 +97,7 @@ php artisan module:vue Invoices/Show --module=Billing --page
 php artisan module:livewire InvoiceHistory --module=Billing
 ```
 
-`module:install --all` installs every module that is not registered yet. Run `php artisan module:check --module=Billing` at any point to check the module against the architecture rules.
+`module:install --all` installs every module that is not registered yet. Run `php artisan module:check Billing` at any point to check the module against the architecture rules.
 
 ---
 
@@ -220,7 +220,7 @@ The only single-letter shortcuts are `-r` (`module:controller --resource`), `-p`
 | `module:install` | `{module?} {--all}` | Writes the module's PSR-4 entries to the root `composer.json` and dumps the autoloader. |
 | `module:uninstall` | `{module?}` | Removes the PSR-4 entries; files stay on disk. |
 | `module:remove` | `{module} {--force}` | Deletes the directory of an uninstalled module. |
-| `module:check` | `{--module=} {--all} {--format=text}` | Checks module code against the architecture rules. |
+| `module:check` | `{module?} {--all} {--format=text}` | Checks one module, or every module, against the architecture rules. |
 | `modular:cache`, `modular:clear` | | Build and remove the module cache. |
 
 ### Generators
@@ -396,10 +396,22 @@ Vue enum fields are text inputs for now.
 `module:check` parses the PHP files of a module and reports violations of the architecture rules. It never loads or runs module code. The rule engine and the generic rules come from the `studeo/check` package that Modular depends on.
 
 ```bash
-php artisan module:check --module=Billing
+php artisan module:check
+php artisan module:check Billing
+php artisan module:check modules/Billing
 php artisan module:check --all
 php artisan module:check --all --format=json
 ```
+
+Which modules are checked:
+
+| You run | In a terminal | With no terminal (a script, CI) |
+|---------|---------------|---------------------------------|
+| `module:check` | asks which module, with `All modules` as the last choice (a single module is used without asking) | checks every module |
+| `module:check --all` | checks every module | checks every module |
+| `module:check Billing` or `module:check modules/Billing` | checks that module | checks that module |
+
+The argument is a module name, or the folder of a module directly under the modules root, written relative to the application or in full. Anything else (a file, a folder inside a module, a folder elsewhere, an unknown name, a name in the wrong case) stops with exit code 2 and names the modules that exist, for example `[Ghost] is not a module. Pass a module name or its folder under modules. Modules: Account, Blog.` A module and `--all` together are refused. Directories under the modules root that are not modules are reported, and make the run exit 2, only when every module is checked.
 
 Text output is one line per finding, `path:line [rule] message`, each message with a fix hint. `--format=json` prints only the findings array on standard output, as objects with `rule`, `file`, `line`, `subject`, `severity` and `message`.
 
@@ -407,7 +419,7 @@ Text output is one line per finding, `path:line [rule] message`, each message wi
 |-----------|---------|
 | 0 | No errors. Warnings never fail the run. |
 | 1 | At least one error. |
-| 2 | A module could not be read, a directory was skipped under `--all`, the rule configuration is invalid, `--module` was combined with `--all`, `--format` is unknown, or the check itself failed. |
+| 2 | A module could not be read, the argument is not a module, a directory was skipped while every module was checked, the rule configuration is invalid, a module was combined with `--all`, `--format` is unknown, or the check itself failed. |
 
 <!-- generated:default-rules -->
 The default rules are `action-authorization`, `action-shape`, `condition-extraction`, `controller-shape`, `dto-shape`, `file-length`, `flat-modules`, `method-complexity`, `method-naming`, `migration`, `module-isolation`, `nesting-depth`, `no-dto-in-livewire-state`, `step-count` and `system-action-usage`.

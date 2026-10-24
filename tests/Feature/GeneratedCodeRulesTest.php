@@ -24,7 +24,7 @@ it('generates code that module:check accepts', function (string $namespace, arra
     blogModule($this, $namespace);
     runGenerators($calls);
 
-    $exitCode = Artisan::call('module:check', ['--module' => 'Blog', '--format' => 'json']);
+    $exitCode = Artisan::call('module:check', ['module' => 'Blog', '--format' => 'json']);
 
     expect(json_decode(Artisan::output(), true, flags: JSON_THROW_ON_ERROR))->toBe([])
         ->and($exitCode)->toBe(0);

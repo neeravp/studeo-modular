@@ -18,7 +18,7 @@ beforeEach(function () {
     foreach (['Blog', 'Shop'] as $name) {
         $this->writeModuleManifest("{$this->rootPath}/{$name}", $name, "Studeo\\{$name}");
     }
-    $this->label = 'Which module should this belong to?';
+    $this->label = 'Which module should be checked?';
     $this->property = function (object $object, string $name): mixed {
         return (fn () => $this->{$name})->call($object);
     };
@@ -66,6 +66,37 @@ it('draws the real prompt on stderr in json format and on stdout in text format'
         ->and($result[$stream === 'stdout' ? 'stderr' : 'stdout'])->not->toContain($this->label);
 })->with([['json', 'stderr'], ['text', 'stdout']]);
 
+it('checks every module when All modules is chosen', function () {
+    foreach (['Blog', 'Shop'] as $name) {
+        File::ensureDirectoryExists("{$this->rootPath}/{$name}/Actions");
+        File::put("{$this->rootPath}/{$name}/Actions/Broken.php", '<?php class {');
+    }
+
+    $result = $this->driver->run('module:check', ['--format' => 'json'], ['All modules']);
+    $files = array_column(json_decode($result['stdout'], true, flags: JSON_THROW_ON_ERROR), 'file');
+
+    expect($result['status'])->toBe(1)
+        ->and($files)->toHaveCount(2)
+        ->and(implode(' ', $files))->toContain('Blog/Actions/Broken.php')->toContain('Shop/Actions/Broken.php');
+});
+
+it('reports a directory that is not a module when All modules is chosen, and not when one module is', function (string $answer, int $status, string $skipped) {
+    File::ensureDirectoryExists("{$this->rootPath}/Stray");
+
+    $result = $this->driver->run('module:check', [], [$answer]);
+
+    expect($result['status'])->toBe($status)
+        ->and($result['stderr'])->toContain($skipped);
+})->with([['All modules', 2, 'Skipped [Stray]'], ['Shop', 0, '']]);
+
+it('does not open the picker when the argument is not a module', function () {
+    $result = $this->driver->run('module:check', ['module' => 'Ghost'], ['Shop']);
+
+    expect($result['status'])->toBe(2)
+        ->and($result['stdout'])->toBe('')
+        ->and($result['stderr'])->not->toContain($this->label)->toContain('[Ghost] is not a module');
+});
+
 it('points Prompts and the components back at the command output after the picker', function (array $options, array $answers, bool $interactive) {
     $command = Artisan::all()['module:check'];
 
@@ -77,8 +108,7 @@ it('points Prompts and the components back at the command output after the picke
         ->and(($this->property)($components, 'output'))->toBe($output);
 })->with([
     'after a choice' => [[], ['Shop'], true],
-    'after a throw with no terminal' => [[], [], false],
-    'after a throw for an unknown module' => [['--module' => 'Ghost'], [], true],
+    'after a throw for an unknown module' => [['module' => 'Ghost'], [], true],
 ]);
 
 it('restores the real prompt output after a choice', function (string $format) {

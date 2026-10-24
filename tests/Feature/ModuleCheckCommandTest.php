@@ -25,7 +25,7 @@ it('exits 0 for a clean generated module', function () {
         runOk($this->work, [...$command, '--module=Blog']);
     }
 
-    $process = checkCommand($this->work, ['module:check', '--module=Blog']);
+    $process = checkCommand($this->work, ['module:check', 'Blog']);
 
     expect($process->getExitCode())->toBe(0, checkOutput($process))
         ->and(trim($process->getOutput()))->toEndWith('0 errors, 0 warnings.');
@@ -35,7 +35,7 @@ it('reports one seeded violation per rule as path:line [rule] and exits 1', func
     seedModule($this, 'Blog', [$path => $contents]);
     runOk($this->work, ['module:make', 'Account']);
 
-    $process = checkCommand($this->work, ['module:check', '--module=Blog']);
+    $process = checkCommand($this->work, ['module:check', 'Blog']);
     $lines = explode("\n", $process->getOutput());
 
     expect($process->getExitCode())->toBe(1, checkOutput($process))
@@ -56,7 +56,7 @@ it('reports one seeded violation per rule as path:line [rule] and exits 1', func
 it('keeps checking other files after one does not parse', function () {
     seedModule($this, 'Blog', ['Services/Broken.php' => "<?php\n\n\$x = ;\n", 'Models/Seeded.php' => "<?php\n\nnamespace Blog\\Models;\n\nfinal class Seeded\n{\n    public function doWork(): void {}\n}\n"]);
 
-    $process = checkCommand($this->work, ['module:check', '--module=Blog']);
+    $process = checkCommand($this->work, ['module:check', 'Blog']);
 
     expect($process->getExitCode())->toBe(1)
         ->and($process->getOutput())->toContain('[syntax]')->toContain('[method-naming]')->toContain('2 errors');
@@ -65,7 +65,7 @@ it('keeps checking other files after one does not parse', function () {
 it('exits 0 for a module with only warnings', function () {
     seedModule($this, 'Blog', ['Services/Long.php' => longFile(240)]);
 
-    $process = checkCommand($this->work, ['module:check', '--module=Blog']);
+    $process = checkCommand($this->work, ['module:check', 'Blog']);
 
     expect($process->getExitCode())->toBe(0, checkOutput($process))
         ->and($process->getOutput())->toContain('modules/Blog/Services/Long.php:1 [file-length]')->toContain('0 errors, 1 warning.');
@@ -85,10 +85,78 @@ it('prints only a JSON array with --format=json, even when the module is picked'
 });
 
 it('prints an empty JSON array for a clean module', function () {
-    $process = checkCommand($this->work, ['module:check', '--module=Blog', '--format=json']);
+    $process = checkCommand($this->work, ['module:check', 'Blog', '--format=json']);
 
     expect($process->getExitCode())->toBe(0)
         ->and(json_decode($process->getOutput(), true, flags: JSON_THROW_ON_ERROR))->toBe([]);
+});
+
+it('takes the module as a name or as its folder under the modules root', function (string $argument) {
+    runOk($this->work, ['module:make', 'Account']);
+    seedModule($this, 'Blog', ['Services/Broken.php' => "<?php\n\n\$x = ;\n"]);
+    seedModule($this, 'Account', ['Services/Broken.php' => "<?php\n\n\$x = ;\n"]);
+
+    $process = checkCommand($this->work, ['module:check', $argument]);
+
+    expect($process->getExitCode())->toBe(1, checkOutput($process))
+        ->and($process->getOutput())->toContain('modules/Blog/Services/Broken.php:3 [syntax]')->not->toContain('modules/Account')->toContain('1 error');
+})->with(['name' => 'Blog', 'folder' => 'modules/Blog', 'folder with a trailing slash' => 'modules/Blog/', 'folder with a leading dot' => './modules/Blog', 'absolute folder' => fn () => config('modular.root_path').'/Blog']);
+
+it('exits 2 and names the fix when the argument is not a module', function (string $argument) {
+    runOk($this->work, ['module:make', 'Account']);
+
+    $process = checkCommand($this->work, ['module:check', $argument]);
+
+    expect($process->getExitCode())->toBe(2, checkOutput($process))
+        ->and($process->getOutput())->toBe('')
+        ->and($process->getErrorOutput())->toContain("[{$argument}] is not a module")->toContain('a module name or its folder under modules')->toContain('Modules: Account, Blog.');
+})->with([
+    'a file' => 'modules/Blog/module.json',
+    'a folder inside a module' => 'modules/Blog/Services',
+    'a folder outside the modules root' => 'app',
+    'the modules root' => 'modules',
+    'a folder named like a module elsewhere' => 'app/Blog',
+    'an unknown name' => 'Ghost',
+    'an unknown folder under the root' => 'modules/Ghost',
+    'a name in the wrong case' => 'blog',
+    'a name with a trailing slash' => 'Blog/',
+]);
+
+it('keeps standard output empty under --format=json when the argument is not a module', function () {
+    $process = checkCommand($this->work, ['module:check', 'Ghost', '--format=json']);
+
+    expect($process->getExitCode())->toBe(2)
+        ->and($process->getOutput())->toBe('')
+        ->and($process->getErrorOutput())->toContain('[Ghost] is not a module');
+});
+
+it('says there are no modules when the argument is not a module and none exist', function () {
+    File::deleteDirectory("{$this->rootPath}/Blog");
+
+    $process = checkCommand($this->work, ['module:check', 'Ghost']);
+
+    expect($process->getExitCode())->toBe(2)
+        ->and($process->getErrorOutput())->toContain('[Ghost] is not a module')->toContain('No modules exist yet')->toContain('module:make');
+});
+
+it('refuses a directory that has no module.json with its own message', function () {
+    File::ensureDirectoryExists("{$this->rootPath}/Stray");
+
+    $process = checkCommand($this->work, ['module:check', 'Stray']);
+
+    expect($process->getExitCode())->toBe(2)
+        ->and($process->getErrorOutput())->toContain('Module [Stray] has no module.json');
+});
+
+it('checks every module when there is no argument and no terminal', function () {
+    runOk($this->work, ['module:make', 'Account']);
+    seedModule($this, 'Blog', ['Services/Broken.php' => "<?php\n\n\$x = ;\n"]);
+    seedModule($this, 'Account', ['Services/Broken.php' => "<?php\n\n\$x = ;\n"]);
+
+    $process = checkCommand($this->work, ['module:check']);
+
+    expect($process->getExitCode())->toBe(1, checkOutput($process))
+        ->and($process->getOutput())->toContain('modules/Blog/Services/Broken.php:3 [syntax]')->toContain('modules/Account/Services/Broken.php:3 [syntax]')->toContain('2 errors');
 });
 
 it('checks every module with --all', function () {
@@ -102,18 +170,18 @@ it('checks every module with --all', function () {
         ->and($process->getOutput())->toContain('modules/Blog/Services/Broken.php:3 [syntax]')->toContain('modules/Account/Services/Broken.php:3 [syntax]')->toContain('2 errors');
 });
 
-it('refuses --module together with --all', function () {
-    $process = checkCommand($this->work, ['module:check', '--all', '--module=Blog']);
+it('refuses a module together with --all', function () {
+    $process = checkCommand($this->work, ['module:check', '--all', 'Blog']);
 
     expect($process->getExitCode())->toBe(2)
-        ->and($process->getErrorOutput())->toContain('--module')->toContain('--all')
+        ->and($process->getErrorOutput())->toContain('a module')->toContain('--all')
         ->and($process->getOutput())->toBe('');
 });
 
 it('exits 2 for a module whose manifest cannot be read', function () {
     File::put("{$this->rootPath}/Blog/module.json", '{not json');
 
-    $process = checkCommand($this->work, ['module:check', '--module=Blog']);
+    $process = checkCommand($this->work, ['module:check', 'Blog']);
 
     expect($process->getExitCode())->toBe(2)
         ->and($process->getErrorOutput())->toContain('module.json');
@@ -130,7 +198,7 @@ it('exits 2 when --all meets a module it cannot read', function () {
 
 it('exits 2 naming the cause for an invalid rule configuration, and leaves artisan and module:make working', function (string $rules, string $cause) {
     $env = ['CHECK_RULES' => $rules];
-    $check = checkCommand($this->work, ['module:check', '--module=Blog'], $env);
+    $check = checkCommand($this->work, ['module:check', 'Blog'], $env);
 
     expect($check->getExitCode())->toBe(2)
         ->and($check->getErrorOutput())->toContain($cause)
@@ -146,8 +214,8 @@ it('exits 2 naming the cause for an invalid rule configuration, and leaves artis
 
 it('exits 2, not 1, for an unexpected exception, and shows its trace under -v', function () {
     $env = ['CHECK_RULES' => 'Studeo\\Modular\\Tests\\CheckRules\\Explodes'];
-    $plain = checkCommand($this->work, ['module:check', '--module=Blog'], $env);
-    $verbose = checkCommand($this->work, ['module:check', '--module=Blog', '-v'], $env);
+    $plain = checkCommand($this->work, ['module:check', 'Blog'], $env);
+    $verbose = checkCommand($this->work, ['module:check', 'Blog', '-v'], $env);
 
     expect($plain->getExitCode())->toBe(2)
         ->and(checkOutput($plain))->toContain('boom from the rule set')->not->toContain('#0 ')

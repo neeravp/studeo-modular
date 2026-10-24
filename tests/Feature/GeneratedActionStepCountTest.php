@@ -26,7 +26,7 @@ function stepCountFindings(object $test, int $count): array
 
     blogModule($test, 'Studeo');
     expect(Artisan::call('module:action', ['name' => 'CreatePost', '--module' => 'Blog', '--schema' => implode(',', $fields)]))->toBe(0);
-    Artisan::call('module:check', ['--module' => 'Blog', '--format' => 'json']);
+    Artisan::call('module:check', ['module' => 'Blog', '--format' => 'json']);
 
     return json_decode(Artisan::output(), true, flags: JSON_THROW_ON_ERROR);
 }

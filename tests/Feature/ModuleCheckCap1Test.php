@@ -23,7 +23,7 @@ afterEach(function () {
 it('prints the three findings of the before fixture and exits 1', function () {
     seedModule($this, 'Enrollment', ['Services/StripePaymentGateway.php' => (string) file_get_contents(__DIR__.'/../fixtures/cap1/StripePaymentGatewayBefore.php')]);
 
-    $process = checkCommand($this->work, ['module:check', '--module=Enrollment']);
+    $process = checkCommand($this->work, ['module:check', 'Enrollment']);
     $lines = array_filter(explode("\n", $process->getOutput()), fn (string $line): bool => str_contains($line, 'Services/StripePaymentGateway.php'));
 
     expect($process->getExitCode())->toBe(1, checkOutput($process))

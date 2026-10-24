@@ -57,7 +57,7 @@ it('groups nine mixed checks by kind, in field order, and passes module:check', 
         ->and(groupingMethodBody($source, 'ensureReferencesExist'))->toMatch('/Ref1IdExists.*Ref3IdExists.*Ref5IdExists.*Ref7IdExists.*Ref9IdExists/s')->not->toContain('IsUnique(')
         ->and(strpos($source, '$this->ensureUniqueValues'))->toBeLessThan(strpos($source, '$this->ensureReferencesExist'));
 
-    Artisan::call('module:check', ['--module' => 'Blog', '--format' => 'json']);
+    Artisan::call('module:check', ['module' => 'Blog', '--format' => 'json']);
     expect(json_decode(Artisan::output(), true, flags: JSON_THROW_ON_ERROR))->toBe([]);
 });
 
